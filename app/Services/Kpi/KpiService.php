@@ -84,7 +84,7 @@ class KpiService
     public function getLeaderboard(string $month, int $limit = 10): array
     {
         $key = self::LEADERBOARD_PREFIX . $month;
-        $results = Redis::zrevrange($key, 0, $limit - 1, 'WITHSCORES');
+        $results = Redis::zrevrange($key, 0, $limit - 1, ['withscores' => true]);
 
         $leaderboard = [];
         foreach ($results as $customerId => $total) {

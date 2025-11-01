@@ -16,12 +16,21 @@ class OrdersImportCommand extends Command
     {
         $filePath = $this->argument('file');
 
-        if (!Storage::exists($filePath)) {
+        // Try Storage first, then fall back to direct file path
+        if (Storage::exists($filePath)) {
+            $fullPath = Storage::path($filePath);
+        } elseif (file_exists($filePath)) {
+            $fullPath = $filePath;
+        } elseif (file_exists(storage_path('app/' . $filePath))) {
+            $fullPath = storage_path('app/' . $filePath);
+        } else {
             $this->error("File not found: {$filePath}");
+            $this->error("Tried paths:");
+            $this->error("  - Storage: " . Storage::path($filePath));
+            $this->error("  - Direct: " . $filePath);
+            $this->error("  - Storage app: " . storage_path('app/' . $filePath));
             return self::FAILURE;
         }
-
-        $fullPath = Storage::path($filePath);
 
         try {
             $csv = Reader::createFromPath($fullPath, 'r');

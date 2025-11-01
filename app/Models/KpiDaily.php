@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class KpiDaily extends Model
 {
-    protected $table = 'kpi_daily';
-
+    use HasFactory;
+    
     protected $guarded = [];
 
     protected function casts(): array
@@ -16,8 +17,7 @@ class KpiDaily extends Model
             'date' => 'date',
             'revenue' => 'decimal:2',
             'order_count' => 'integer',
-            'sum_total' => 'decimal:2',
-            'avg_order_value' => 'decimal:2',
+            'average_order_value' => 'decimal:2',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];

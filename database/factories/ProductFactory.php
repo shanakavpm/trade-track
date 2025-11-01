@@ -2,21 +2,20 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
 {
-    protected $model = Product::class;
-
     public function definition(): array
     {
         return [
-            'sku' => fake()->unique()->regexify('[A-Z]{3}-[0-9]{4}'),
-            'name' => fake()->words(3, true),
-            'description' => fake()->sentence(),
-            'price' => fake()->randomFloat(2, 10, 1000),
-            'stock_quantity' => fake()->numberBetween(0, 100),
+            'sku' => $this->faker->unique()->regexify('[A-Z0-9]{8}'),
+            'name' => $this->faker->words(3, true),
+            'description' => $this->faker->optional()->sentence(),
+            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'stock_quantity' => $this->faker->numberBetween(0, 1000),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
