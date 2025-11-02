@@ -26,14 +26,8 @@ class MockPaymentService
         $signature = $this->generateSignature($payment);
         $payment->update(['callback_signature' => $signature]);
 
-        return URL::temporarySignedRoute(
-            'payments.mock.callback',
-            now()->addMinutes(15),
-            [
-                'payment' => $payment->id,
-                'signature' => $signature,
-            ]
-        );
+        // For mock/testing purposes, return a simple URL without requiring route registration
+        return config('app.url') . '/api/payments/mock/callback/' . $payment->id . '?signature=' . $signature;
     }
 
     public function verifySignature(Payment $payment, string $signature): bool

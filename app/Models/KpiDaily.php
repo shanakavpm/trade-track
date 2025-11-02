@@ -9,6 +9,8 @@ class KpiDaily extends Model
 {
     use HasFactory;
     
+    protected $table = 'kpi_daily';
+    
     protected $guarded = [];
 
     protected function casts(): array

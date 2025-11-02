@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\DTOs\OrderImportRow;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,7 +31,7 @@ class ValidateRowJob implements ShouldQueue
     {
         $validator = Validator::make($this->rowData, [
             'order_id' => 'required|string|max:255',
-            'customer_id' => 'required|integer|exists:customers,id',
+            'customer_id' => 'required|integer|exists:users,id',
             'sku' => 'required|string|exists:products,sku',
             'qty' => 'required|integer|min:1|max:10000',
             'unit_price' => 'required|numeric|min:0|max:999999.99',

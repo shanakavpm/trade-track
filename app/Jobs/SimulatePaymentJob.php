@@ -56,9 +56,21 @@ class SimulatePaymentJob implements ShouldQueue
             'callback_url' => $callbackUrl,
         ]);
 
-        // In a real scenario, this would redirect to payment gateway
-        // For simulation, we'll auto-complete after a short delay
-        // The callback controller will handle the actual completion
+        // For simulation purposes, auto-complete the payment
+        // In production, this would be triggered by payment gateway callback
+        $success = rand(1, 100) <= 90; // 90% success rate
+        
+        $payment->update([
+            'status' => $success ? 'completed' : 'failed',
+        ]);
+
+        Log::info('Payment ' . ($success ? 'completed' : 'failed'), [
+            'order_id' => $this->orderId,
+            'payment_id' => $payment->id,
+        ]);
+
+        // Dispatch finalize job
+        FinalizeOrRollbackJob::dispatch($this->orderId, $success);
     }
 
     public function tags(): array
