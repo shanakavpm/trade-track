@@ -98,10 +98,10 @@ class GenerateLargeCsv extends Command
 
         fclose($handle);
 
-        $this->info("✅ Successfully generated {$filename} with {$rows} realistic order records");
-        $this->info("📂 File location: {$path}");
-        $this->info("📊 Products included: " . count($this->products));
-        $this->info("👥 Customers: " . count($this->customers));
+        $this->info("Successfully generated {$filename} with {$rows} realistic order records");
+        $this->info("File location: {$path}");
+        $this->info("Products included: " . count($this->products));
+        $this->info("Customers: " . count($this->customers));
     }
     
     /**
