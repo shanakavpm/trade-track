@@ -2,7 +2,7 @@
 
 use App\DTOs\OrderProcessedPayload;
 use App\Jobs\SendOrderNotificationJob;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\NotificationLog;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
@@ -12,11 +12,11 @@ beforeEach(function () {
 });
 
 test('notification is logged when sent', function () {
-    $customer = Customer::factory()->create([
+    $customer = User::factory()->create([
         'email' => 'test@example.com',
     ]);
 
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'completed',
         'total' => 100.00,
@@ -43,11 +43,11 @@ test('notification is logged when sent', function () {
 });
 
 test('notification log contains correct payload', function () {
-    $customer = Customer::factory()->create([
+    $customer = User::factory()->create([
         'email' => 'test@example.com',
     ]);
 
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'completed',
         'total' => 150.50,

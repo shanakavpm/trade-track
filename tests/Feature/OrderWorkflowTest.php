@@ -4,7 +4,7 @@ use App\DTOs\OrderImportRow;
 use App\Jobs\CreateOrderJob;
 use App\Jobs\FinalizeOrRollbackJob;
 use App\Jobs\ReserveStockJob;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\Stock\StockService;
@@ -15,7 +15,7 @@ beforeEach(function () {
 });
 
 test('order workflow creates order successfully', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     $product = Product::factory()->create([
         'sku' => 'TEST-001',
         'price' => 100.00,
@@ -43,13 +43,13 @@ test('order workflow creates order successfully', function () {
 });
 
 test('order workflow handles stock reservation', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     $product = Product::factory()->create([
         'sku' => 'TEST-001',
         'stock_quantity' => 10,
     ]);
 
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'pending',
         'total' => 200.00,
@@ -74,12 +74,12 @@ test('order workflow handles stock reservation', function () {
 });
 
 test('order workflow rolls back on failure', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     $product = Product::factory()->create([
         'stock_quantity' => 10,
     ]);
 
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'processing',
         'total' => 200.00,

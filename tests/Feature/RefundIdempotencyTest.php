@@ -2,17 +2,17 @@
 
 use App\DTOs\RefundRequestPayload;
 use App\Jobs\QueueRefundJob;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Refund;
 
 test('refund is idempotent based on order and amount', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     $product = Product::factory()->create();
     
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'completed',
         'total' => 100.00,
@@ -47,9 +47,9 @@ test('refund is idempotent based on order and amount', function () {
 });
 
 test('refund validates order status', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'pending', // Not completed
         'total' => 100.00,
@@ -68,9 +68,9 @@ test('refund validates order status', function () {
 });
 
 test('refund validates amount does not exceed order total', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     
-    $order = Order::factory()->create([
+    $order = Order::factory()->withoutItems()->create([
         'customer_id' => $customer->id,
         'status' => 'completed',
         'total' => 100.00,

@@ -8,14 +8,19 @@ class ProductFactory extends Factory
 {
     public function definition(): array
     {
+        $faker = \Faker\Factory::create();
+        
+        $productNames = [
+            'Laptop', 'Smartphone', 'Tablet', 'Headphones', 'Keyboard',
+            'Mouse', 'Monitor', 'Webcam', 'Microphone', 'Speaker',
+        ];
+
         return [
-            'sku' => $this->faker->unique()->regexify('[A-Z0-9]{8}'),
-            'name' => $this->faker->words(3, true),
-            'description' => $this->faker->optional()->sentence(),
-            'price' => $this->faker->randomFloat(2, 10, 1000),
-            'stock_quantity' => $this->faker->numberBetween(0, 1000),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'sku' => strtoupper($faker->unique()->bothify('PRD-####??')),
+            'name' => $faker->randomElement($productNames) . ' ' . $faker->word(),
+            'description' => $faker->optional(0.7)->sentence(12),
+            'price' => $faker->randomFloat(2, 9.99, 999.99),
+            'stock_quantity' => $faker->numberBetween(0, 500),
         ];
     }
 }

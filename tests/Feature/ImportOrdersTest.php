@@ -1,7 +1,7 @@
 <?php
 
 use App\Jobs\ValidateRowJob;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +21,7 @@ test('orders import command validates CSV headers', function () {
 });
 
 test('orders import command dispatches validation jobs', function () {
-    $customer = Customer::factory()->create();
+    $customer = User::factory()->create();
     $product = Product::factory()->create(['sku' => 'TEST-SKU']);
 
     $csv = "order_id,customer_id,sku,qty,unit_price\n";

@@ -3,10 +3,4 @@
 use App\Http\Controllers\TestMailController;
 use Illuminate\Support\Facades\Route;
 
-// Main route
-Route::get('/', function () {
-    return view('welcome');
-});
-
-// Test email route
 Route::get('/test-email', [TestMailController::class, 'sendTestEmail']);

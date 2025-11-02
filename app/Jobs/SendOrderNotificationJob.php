@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\DTOs\OrderProcessedPayload;
 use App\Mail\OrderStatusMail;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\NotificationLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +29,7 @@ class SendOrderNotificationJob implements ShouldQueue
 
     public function handle(): void
     {
-        $customer = Customer::find($this->payload->customerId);
+        $customer = User::find($this->payload->customerId);
 
         if (!$customer) {
             Log::error('Customer not found for notification', [

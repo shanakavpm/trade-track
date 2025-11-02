@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('notification_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
             $table->enum('type', ['email', 'log'])->default('email');
             $table->string('status');
             $table->decimal('total', 12, 2);

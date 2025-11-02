@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('idempotency_key')->unique();
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['pending', 'processing', 'completed', 'failed', 'cancelled'])->default('pending');
+            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['pending', 'processing', 'completed', 'failed', 'cancelled', 'refunded'])->default('pending');
             $table->decimal('total', 12, 2);
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
