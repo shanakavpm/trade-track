@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
         
         $this->command->info('');
         $this->command->info('✅ Database ready for CSV import!');
-        $this->command->info('   Run: php artisan orders:import orders_sample.csv');
+        $this->command->info('   Run: php artisan orders:import file.csv');
     }
 }

@@ -22,7 +22,7 @@
 ./start-services.sh
 
 # 3. Import orders
-php artisan orders:import orders_sample.csv
+php artisan orders:import file.csv
 ```
 
 **Done!** View at:
@@ -73,10 +73,7 @@ php artisan orders:import orders_sample.csv
 ### Option 1: Import Sample Data
 ```bash
 # Import the included sample file
-php artisan orders:import orders_sample.csv
-
-# Import the included large sample file
-php artisan orders:import orders_large.csv
+php artisan orders:import file.csv
 ```
 
 ### Option 2: Import Your Own CSV
@@ -90,14 +87,11 @@ php artisan orders:import /path/to/your/file.csv
 
 ### Option 3: Generate Large CSV for Testing
 ```bash
-# Generate 500 rows
-php artisan generate:large-csv 500
-
 # Generate with custom filename
-php artisan generate:large-csv 1000 --filename=orders_large.csv
+php artisan generate:file 500 --filename=file.csv
 
 # Import the generated file
-php artisan orders:import orders_large.csv
+php artisan orders:import file.csv
 ```
 
 ### Import Options
@@ -203,7 +197,7 @@ php artisan test --filter=NotificationLogTest
 
 ```bash
 # Import orders from CSV
-php artisan orders:import orders_sample.csv
+php artisan orders:import file.csv
 
 # Generate large CSV for testing
 php artisan generate:large-csv 500

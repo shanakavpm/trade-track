@@ -115,7 +115,7 @@ echo -e "  📊 Horizon:      http://localhost:8000/horizon"
 echo -e "  📧 Mailpit:      http://localhost:8025"
 
 echo -e "\n${YELLOW}📝 Next Steps:${NC}"
-echo "  1. Import CSV:    php artisan orders:import orders_sample.csv"
+echo "  1. Import CSV:    php artisan orders:import file.csv"
 echo "  2. Check Horizon: http://localhost:8000/horizon"
 echo "  3. Check Emails:  http://localhost:8025"
 
@@ -126,4 +126,4 @@ echo "  View Mailpit logs:  tail -f storage/logs/mailpit.log"
 echo "  Stop all services:  pkill -f 'php artisan serve|horizon|mailpit|redis-server'"
 
 echo -e "\n${YELLOW}🚀 Ready to import orders!${NC}"
-echo -e "Run: ${GREEN}php artisan orders:import orders_sample.csv${NC}"
+echo -e "Run: ${GREEN}php artisan orders:import file.csv${NC}"

@@ -13,9 +13,9 @@ class GenerateLargeCsv extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:large-csv 
+    protected $signature = 'generate:file 
                             {rows=1000 : Number of rows to generate} 
-                            {--filename=orders_large.csv : Output filename in project root}';
+                            {--filename=file.csv : Output filename in project root}';
 
     /**
      * The console command description.
