@@ -9,7 +9,9 @@ use League\Csv\Reader;
 
 class OrdersImportCommand extends Command
 {
-    protected $signature = 'orders:import {file} {--chunk=100 : Number of rows to process in each chunk} {--queue=default : Queue connection to use}';
+    protected $signature = 'orders:import {file}
+                            {--chunk= : Number of rows to process in each chunk (default: 100)}
+                            {--queue= : Queue connection to use (default: high)}';
     protected $description = 'Import orders from CSV file with chunked processing';
 
     public function handle(): int
@@ -46,8 +48,13 @@ class OrdersImportCommand extends Command
 
             $this->info('Starting CSV import...');
             $rowNumber = 1; // Start after header
-            $chunkSize = (int)$this->option('chunk');
-            $queue = $this->option('queue');
+            
+            // Set default values
+            $defaultChunkSize = 100;
+            $defaultQueue = 'high';
+            
+            $chunkSize = (int)($this->option('chunk') ?? $defaultChunkSize);
+            $queue = $this->option('queue') ?? $defaultQueue;
             $chunk = [];
 
             foreach ($csv->getRecords() as $record) {

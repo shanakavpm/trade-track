@@ -2,25 +2,33 @@
 
 [![Tests](https://img.shields.io/badge/tests-21%20passed-brightgreen)]() [![PHP](https://img.shields.io/badge/PHP-8.4-blue)]() [![Laravel](https://img.shields.io/badge/Laravel-12-red)]()
 
-Enterprise-grade Laravel 12 order processing system with async workflows, KPI tracking, and Redis-backed analytics.
+
 
 ## ✨ Status: PRODUCTION READY
 
 - ✅ **21/21 tests passing (100%)**
-- ✅ All database schema issues fixed
-- ✅ All original requirements met
-- ✅ Idempotent refund processing
+- ✅ CSV import with queue processing
+- ✅ Email notifications
+- ✅ Refund processing
 - ✅ Real-time KPI tracking
-- ✅ Queue-based async processing
 
-## 🚀 Quick Start
+## 🚀 Quick Start (3 Steps)
 
 ```bash
-# One-command setup
+# 1. Setup everything
 ./setup.sh
+
+# 2. Start services
+./start-services.sh
+
+# 3. Import orders
+php artisan orders:import orders_sample.csv
 ```
 
-That's it! The application is ready at `http://localhost:8000`
+**Done!** View at:
+- App: `http://localhost:8000`
+- Emails: `http://localhost:8025`
+- Horizon: `http://localhost:8000/horizon`
 
 ## 📋 Features
 
@@ -52,80 +60,59 @@ That's it! The application is ready at `http://localhost:8000`
 - **Supervisor** - Process management
 - **PHPUnit/Pest** - Testing framework
 
-## 📦 Manual Setup
+## 📦 Requirements
 
+- PHP 8.4+
+- Composer
+- MariaDB/MySQL
+- Redis
+- Mailpit (optional, for email testing)
+
+## 📥 Import CSV Files
+
+### Option 1: Import Sample Data
 ```bash
-# Install dependencies
-composer install
-
-# Copy environment file
-cp .env.example .env
-
-# Generate application key
-php artisan key:generate
-
-# Configure database in .env
-DB_CONNECTION=mysql
-DB_DATABASE=trade_track
-DB_USERNAME=your_user
-DB_PASSWORD=your_password
-
-# Run migrations
-php artisan migrate
-
-# Seed sample data
-php artisan db:seed
-
-# Cache configuration
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Import the included sample file
+php artisan orders:import orders_sample.csv
 ```
 
-## 🏃 Running the Application
-
+### Option 2: Import Your Own CSV
 ```bash
-# Start application server
-php artisan serve
+# Place your CSV file in the project root
+php artisan orders:import your_file.csv
 
-# Start Horizon queue worker (in another terminal)
-php artisan horizon
-
-# Start development server
-php artisan serve
-
-# View Horizon dashboard
-http://localhost:8000/horizon
-
-# Start Mailpit (for email testing)
-mailpit
+# Or specify full path
+php artisan orders:import /path/to/your/file.csv
 ```
 
-## Import Orders
-
+### Option 3: Generate Large CSV for Testing
 ```bash
-# Copy sample CSV to storage
-cp orders_sample.csv storage/app/imports/orders.csv
+# Generate 500 rows
+php artisan generate:large-csv 500
 
-# Run import command
-php artisan orders:import storage/app/imports/orders.csv
+# Generate with custom filename
+php artisan generate:large-csv 1000 --filename=orders_large.csv
 
-# Monitor progress in Horizon
-http://localhost:8000/horizon
+# Import the generated file
+php artisan orders:import orders_large.csv
 ```
 
-## API Endpoints
-
+### Import Options
 ```bash
-# Get today's KPIs
-GET /api/kpi/today
+# Custom chunk size (default: 100)
+php artisan orders:import file.csv --chunk=200
 
-# Get current month leaderboard
-GET /api/leaderboard/current-month
+# Custom queue (default: high)
+php artisan orders:import file.csv --queue=default
 
-# Mock payment callback (signed route)
-POST /api/payments/mock/callback/{payment}?signature={sig}
+# Both options
+php artisan orders:import file.csv --chunk=200 --queue=high
 ```
+
+### Monitor Import Progress
+- Open Horizon: `http://localhost:8000/horizon`
+- Check queue jobs in real-time
+- View failed jobs and retry them
 
 ## CSV Format
 
@@ -209,14 +196,32 @@ php artisan test --filter=NotificationLogTest
 - Check MAIL_PORT=1025 in .env
 - View emails: `http://localhost:8025`
 
-## Commands
+## 🎯 Common Commands
 
 ```bash
 # Import orders from CSV
-php artisan orders:import {file}
+php artisan orders:import orders_sample.csv
 
-# Snapshot KPIs to database
-php artisan kpi:snapshot [--date=2025-11-01]
+# Generate large CSV for testing
+php artisan generate:large-csv 500
+
+# Snapshot KPIs to database (today)
+php artisan kpi:snapshot
+
+# Snapshot KPIs for specific date
+php artisan kpi:snapshot --date=2025-11-01
+
+# Reset database and seed fresh data
+php artisan migrate:fresh --seed
+
+# Run tests
+php artisan test
+
+# Start queue worker
+php artisan queue:work
+
+# Start Horizon
+php artisan horizon
 ```
 
 ## Architecture
