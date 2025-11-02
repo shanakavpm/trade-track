@@ -9,7 +9,7 @@ use League\Csv\Reader;
 
 class OrdersImportCommand extends Command
 {
-    protected $signature = 'orders:import {file}';
+    protected $signature = 'orders:import {file} {--chunk=100 : Number of rows to process in each chunk} {--queue=default : Queue connection to use}';
     protected $description = 'Import orders from CSV file with chunked processing';
 
     public function handle(): int
@@ -46,7 +46,8 @@ class OrdersImportCommand extends Command
 
             $this->info('Starting CSV import...');
             $rowNumber = 1; // Start after header
-            $chunkSize = 100;
+            $chunkSize = (int)$this->option('chunk');
+            $queue = $this->option('queue');
             $chunk = [];
 
             foreach ($csv->getRecords() as $record) {
@@ -54,14 +55,14 @@ class OrdersImportCommand extends Command
                 $chunk[] = ['data' => $record, 'row' => $rowNumber];
 
                 if (count($chunk) >= $chunkSize) {
-                    $this->dispatchChunk($chunk);
+                    $this->dispatchChunk($chunk, $queue);
                     $chunk = [];
                 }
             }
 
             // Dispatch remaining rows
             if (!empty($chunk)) {
-                $this->dispatchChunk($chunk);
+                $this->dispatchChunk($chunk, $queue);
             }
 
             $this->info("CSV import queued successfully. Total rows: " . ($rowNumber - 1));
@@ -73,10 +74,12 @@ class OrdersImportCommand extends Command
         }
     }
 
-    private function dispatchChunk(array $chunk): void
+    private function dispatchChunk(array $chunk, string $queue): void
     {
         foreach ($chunk as $item) {
-            ValidateRowJob::dispatch($item['data'], $item['row']);
+            $row = $item['data'];
+            $rowNumber = $item['row'];
+            ValidateRowJob::dispatch($row, $rowNumber)->onQueue($queue);
         }
     }
 }
