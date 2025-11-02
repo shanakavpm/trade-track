@@ -178,11 +178,6 @@ php artisan test --filter=NotificationLogTest
 - Check for database locks
 - Review logs: `storage/logs/laravel.log`
 
-**Payment callback errors?**
-- Verify signature matches
-- Check callback hasn't expired (15min)
-- Ensure route is signed: `URL::temporarySignedRoute()`
-
 **KPIs not updating?**
 - Check Redis connection
 - Verify events are firing
