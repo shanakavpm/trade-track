@@ -74,6 +74,9 @@ php artisan orders:import orders_sample.csv
 ```bash
 # Import the included sample file
 php artisan orders:import orders_sample.csv
+
+# Import the included large sample file
+php artisan orders:import orders_large.csv
 ```
 
 ### Option 2: Import Your Own CSV
@@ -209,7 +212,7 @@ php artisan generate:large-csv 500
 php artisan kpi:snapshot
 
 # Snapshot KPIs for specific date
-php artisan kpi:snapshot --date=2025-11-01
+php artisan kpi:snapshot --date=2025-11-02
 
 # Reset database and seed fresh data
 php artisan migrate:fresh --seed
